@@ -28,7 +28,7 @@ if (isset($_GET['id'])) {
     // Check if user confirmed deletion using JavaScript
     if (isset($_GET['confirm']) && $_GET['confirm'] == 'yes') {
         // Construct the SQL query to delete the record
-        $query = "DELETE FROM add_member WHERE id='$id'";
+        $query = "DELETE FROM add_student WHERE id='$id'";
 
         // Perform the deletion query
         $result = mysqli_query($conn, $query);

@@ -63,6 +63,7 @@ $conn=mysqli_connect("localhost","root", "", "project_luna") or die("COnnection 
                             <td><?php echo $res['author'];?></td>
                             <td><?php echo $res['publisher'];?></td>
                             <td>
+                            <button><a href="bookDetail.php?id=<?php echo $res['id']; ?>"><i class="fa fa-eye"></i></a></button>
                             <button><a href="editBook.php?id=<?php echo $res['id']; ?>"><i class="fa fa-edit"></i></a><button>
                             <button><a href="deleteBook.php?id=<?php echo $res['id']; ?>"><i class="fa fa-trash"></i></a></button>
 </td> 

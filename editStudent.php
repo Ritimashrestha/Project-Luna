@@ -19,11 +19,12 @@ if (isset($_GET['id'])) {
 if (isset($_POST['update'])) {
     $id = $_POST['id'];
     $name = $_POST['name'];
+    $sid = $_POST['sid'];
     $class = $_POST['class'];
     $address = $_POST['address'];
     $contact = $_POST['contact'];
 
-    $sql = "UPDATE add_student SET name='$name', class='$class', address='$address', contact='$contact'WHERE id='$id'";
+    $sql = "UPDATE add_student SET name='$name', sid='$sid', class='$class', address='$address', contact='$contact'WHERE id='$id'";
     if (mysqli_query($conn, $sql)) {
         header("Location: students.php");
         exit; // Ensure script stops execution after redirection
@@ -40,6 +41,24 @@ if (isset($_POST['update'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="assets/form.css">
+    <style>
+        .btn-cancel {
+            background-color: #f44336; /* Red */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            border-radius: 5px;
+        }
+        .btn-cancel:hover {
+            background-color: #da190b;
+        }
+    </style>
     <title>Edit Student</title>
 </head>
 <body>
@@ -54,8 +73,12 @@ if (isset($_POST['update'])) {
                         <input type="text" name="name" id="name" autocomplete="off" value="<?php echo $student['name']; ?>" required>
                     </div>     
                     <div class="field input">
+                     <label for="sid">Student ID</label>
+                     <input type="number" name="sid" id="sid" autocomplete="off" value="<?php echo $student['sid']; ?>" required>
+                 </div>  
+                    <div class="field input">
                         <label for="class">Class</label>
-                        <input type="text" name="class" id="class" autocomplete="off" value="<?php echo $student['class']; ?>" required>
+                        <input type="number" name="class" id="class" autocomplete="off" value="<?php echo $student['class']; ?>" required>
                     </div> 
                     <div class="field input">
                         <label for="address">Address</label>
@@ -65,8 +88,9 @@ if (isset($_POST['update'])) {
                         <label for="contact">Contact No.</label>
                         <input type="text" name="contact" id="contact" autocomplete="off" value="<?php echo $student['contact']; ?>" required>
                     </div> 
-                    <div class="field">        
+                    <div class="field">
                         <input type="submit" class="btn" name="update" value="Update">
+                        <a href="students.php" class="btn-cancel">Cancel</a>
                     </div>
                 </form>
             <?php else: ?>

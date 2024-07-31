@@ -23,20 +23,16 @@ $total_students_result = mysqli_query($conn, $total_students_query);
 $total_students_data = mysqli_fetch_assoc($total_students_result);
 $total_students = $total_students_data['total_students'];
 
-// Fetch total genre count
-$total_genre_query = "SELECT COUNT(*) as total_genre FROM add_book"; 
-$total_genre_result = mysqli_query($conn, $total_genre_query);
-$total_genre_data = mysqli_fetch_assoc($total_genre_result);
-$total_genre = $total_genre_data['total_genre'];
-
 // Default query without search filter
 $sql = "SELECT * FROM `add_member`";
 
 // Check if search query is present
 if(isset($_GET['search_query']) && !empty($_GET['search_query'])) {
-    $search_query = $_GET['search_query'];
-    // Modify SQL query to include search filter
-    $sql .= " WHERE `book` LIKE '%$search_query%' OR `name` LIKE '%$search_query%'";
+    $search_query = mysqli_real_escape_string($conn, $_GET['search_query']);
+    // Modify SQL query to include search filter by student ID
+    $sql = "SELECT am.* FROM add_student am
+            JOIN add_student ast ON am.name = ast.name
+            WHERE ast.sid LIKE '%$search_query%'";
 }
 
 // Execute SQL query
@@ -72,7 +68,7 @@ $qry = mysqli_query($conn, $sql);
             padding: 20px;
             border: 1px solid #888;
             width: 50%;
-            border-radius: 15px
+            border-radius: 15px;
         }
         .close {
             color: #aaa;
@@ -100,7 +96,7 @@ $qry = mysqli_query($conn, $sql);
                 <div class="search--box">
                     <form action="dashboard.php" method="GET">
                         <i class="fa-solid fa-search"></i>
-                        <input type="text" name="search_query" placeholder="Search">
+                        <input type="text" name="search_query" placeholder="Search by Student ID">
                         <button type="submit">Search</button>
                     </form>
                 </div>
@@ -124,7 +120,7 @@ $qry = mysqli_query($conn, $sql);
                 <div class="payment--card light-purple">
                     <div class="card--header">
                         <div class="amount">
-                            <span class="title">Total Transactions</span>
+                            <span class="title">Total transactions</span>
                             <span class="amount-value"><?php echo $total_transactions; ?></span>
                         </div>
                         <i class="fas fa-list icon dark-purple"></i>
@@ -144,15 +140,15 @@ $qry = mysqli_query($conn, $sql);
                 </div>
 
                 <div class="payment--card light-blue">
-                <div class="card--header">
-                    <div class="amount">
-                        <span class="title">Genre</span>
-                        <span class="amount-value"><?php echo $total_genre; ?></span>
+                    <div class="card--header">
+                        <div class="amount">
+                            <span class="title">Genre</span>
+                            <span class="amount-value"><?php echo $total_genre; ?></span>
+                        </div>
+                        <i class="fa-solid fa-check icon dark-blue"></i>
                     </div>
-                    <i class="fa-solid fa-check icon dark-blue"></i>
+                    <span class="card-detail">**** **** **** ****</span>
                 </div>
-                <span class="card-detail">**** **** **** ****</span>
-            </div>
             </div>
             <div class="tabular--wrapper">
                 <h3 class="main--title">Transaction Data</h3>
@@ -165,28 +161,32 @@ $qry = mysqli_query($conn, $sql);
                                 <th>Book</th>
                                 <th>Date</th>
                                 <th>Due Date</th>
+                                <th>Return Date</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <?php
-                        $sql = "SELECT * FROM `add_member`";
-                        $qry = mysqli_query($conn, $sql);
-                        while($res = mysqli_fetch_array($qry)){
-                        ?>
+                        <?php if (mysqli_num_rows($qry) > 0) { 
+                            while($res = mysqli_fetch_array($qry)){ ?>
                         <tr class="user-table">
                             <td><?php echo $res['id'];?></td>
                             <td><?php echo $res['name'];?></td>
                             <td><?php echo $res['book'];?></td>
                             <td><?php echo $res['date'];?></td>
                             <td><?php echo $res['duedate'];?></td>
+                            <td><?php echo $res['returndate'];?></td>
                             <td><?php echo $res['status'];?></td>
                             <td>
-                                <button> <a href="editMember.php?id=<?php echo $res['id']; ?>"> <i class="fa fa-edit"></i></a></button>
-                                <button> <a href="deleteMember.php?id=<?php echo $res['id']; ?>"> <i class="fa fa-trash"></i></a></button>
+                            <button><a href="transactionDetail.php?id=<?php echo $res['id']; ?>"><i class="fa fa-eye"></i></a></button>
+                                <button><a href="editMember.php?id=<?php echo $res['id']; ?>"><i class="fa fa-edit"></i></a></button>
+                                <button><a href="deleteMember.php?id=<?php echo $res['id']; ?>"><i class="fa fa-trash"></i></a></button>
                             </td> 
                         </tr>
-                        <?php }; ?>
+                        <?php } } else { ?>
+                        <tr>
+                            <td colspan="8">No transactions found for the given Student ID.</td>
+                        </tr>
+                        <?php } ?>
                     </table>
                 </div>
             </div>

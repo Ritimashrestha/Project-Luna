@@ -1,6 +1,7 @@
 <?php
 if (isset($_POST['submit'])){
 $name = $_POST['name'];
+$sid = $_POST['sid'];
 $class = $_POST['class'];
 $address = $_POST['address'];
 $contact = $_POST['contact'];
@@ -12,7 +13,7 @@ $dbname = 'project_luna';
 
 $conn = mysqli_connect($host, $user, $pass,$dbname);
 
-$sql = "INSERT INTO add_student(name, class, address, contact) VALUES ('$name', '$class', '$address', '$contact' )";
+$sql = "INSERT INTO add_student(name, sid, class, address, contact) VALUES ('$name', '$sid', '$class', '$address', '$contact' )";
 mysqli_query($conn, $sql);
 
 header("Location: students.php");
@@ -49,9 +50,13 @@ header("Location: students.php");
                      <label for="name">Name</label>
                      <input type="text" name="name" id="name" autocomplete="off" required>
                  </div>     
+                 <div class="field input">
+                     <label for="sid">Student ID</label>
+                     <input type="number" name="sid" id="sid" autocomplete="off" required>
+                 </div>     
                 <div class="field input">
                      <label for="class">Class</label>
-                     <input type="text" name="class" id="class" autocomplete="off" required>
+                     <input type="number" name="class" id="class" autocomplete="off" required>
                 </div> 
                 <div class="field input">
                     <label for="address">Address </label>

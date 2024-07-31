@@ -42,6 +42,24 @@ if (isset($_POST['update'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="assets/form.css">
     <title>Edit Book</title>
+    <style>
+        .btn-cancel {
+            background-color: #f44336; /* Red */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            border-radius: 5px;
+        }
+        .btn-cancel:hover {
+            background-color: #da190b;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -70,8 +88,9 @@ if (isset($_POST['update'])) {
                         <label for="publisher">Publisher</label>
                         <input type="text" name="publisher" id="publisher" autocomplete="off" value="<?php echo $book['publisher']; ?>" required>
                     </div> 
-                    <div class="field">        
+                    <div class="field">
                         <input type="submit" class="btn" name="update" value="Update">
+                        <a href="books.php" class="btn-cancel">Cancel</a>
                     </div>
                 </form>
             <?php else: ?>

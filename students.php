@@ -37,6 +37,7 @@ $conn=mysqli_connect("localhost","root", "", "project_luna") or die("COnnection 
                              <tr>
                                 <th>SN</th>
                                 <th>Student Name</th> 
+                                <th>Student ID</th> 
                                 <th>Class</th>
                                 <th>Address</th>
                                 <th>Contact</th>
@@ -50,10 +51,12 @@ $conn=mysqli_connect("localhost","root", "", "project_luna") or die("COnnection 
                         <tr>
                             <td><?php echo $res['id'];?></td>
                             <td><?php echo $res['name'];?></td>
+                            <td><?php echo $res['sid'];?></td>
                             <td><?php echo $res['class'];?></td>
                             <td><?php echo $res['address'];?></td>
                             <td><?php echo $res['contact'];?></td>
                             <td>
+                            <button><a href="studentDetail.php?id=<?php echo $res['id']; ?>"><i class="fa fa-eye"></i></a></button>
                             <button><a href="editStudent.php?id=<?php echo $res['id']; ?>"><i class="fa fa-edit"></i></a><button>
                             <button><a href="deleteStudent.php?id=<?php echo $res['id']; ?>"><i class="fa fa-trash"></i></a></button>
 </td> 
