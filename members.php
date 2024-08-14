@@ -11,10 +11,32 @@ $conn = mysqli_connect("localhost", "root", "", "project_luna") or die("Connecti
     <link rel="stylesheet" href="assets/luna.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-.btn {
-    padding: 0 0 0 70rem;
-    background-color: inherit;
-}
+        .btn {
+            margin-left: 70rem;
+            padding: 10px 20px;
+            border: none;
+            background-color: rgba(76, 68, 182, 0.808);
+            color: white;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #69399F; 
+        }
+        .btn a {
+            color: white; 
+            text-decoration: none; 
+        }
+        .disabled-btn {
+            background-color: #ccc; 
+            cursor: not-allowed;
+        }
+        .disabled-btn i {
+            color: #999;
+        }
     </style>
 </head>
 <body>
@@ -48,19 +70,6 @@ include("inc/sidebar.php");
                 </thead>
                 <tbody>
                 <?php
-                if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                    $name = $_POST['name'];
-                    $sid = $_POST['sid'];
-                    $book = $_POST['book'];
-                    $date = $_POST['date'];
-                    $duedate = $_POST['duedate'];
-                    $returndate = $_POST['returndate'];
-                    $status = $_POST['status'];
-
-                    $sql1 = "INSERT INTO add_members(name, sid, book, date, duedate, returndate, status) VALUES ('$name',  '$sid', '$book', '$date', '$duedate', '$returndate', '$status')";
-                    mysqli_query($conn, $sql1);
-                }
-
                 $sql = "SELECT * FROM `add_member`";
                 $qry = mysqli_query($conn, $sql);
                 while ($res = mysqli_fetch_array($qry)) {
@@ -76,7 +85,15 @@ include("inc/sidebar.php");
                     <td><?php echo $res['status']; ?></td>
                     <td>
                         <button><a href="transactionDetail.php?id=<?php echo $res['id']; ?>"><i class="fa fa-eye"></i></a></button>
-                        <button><a href="editMember.php?id=<?php echo $res['id']; ?>"><i class="fa fa-edit"></i></a></button>
+
+                        <?php if ($res['status'] == 'Returned') { ?>
+                            <!-- Render a disabled edit button -->
+                            <button class="disabled-btn" disabled><i class="fa fa-edit"></i></button>
+                        <?php } else { ?>
+                            <!-- Render the active edit button -->
+                            <button><a href="editMember.php?id=<?php echo $res['id']; ?>"><i class="fa fa-edit"></i></a></button>
+                        <?php } ?>
+
                         <button><a href="deleteMember.php?id=<?php echo $res['id']; ?>"><i class="fa fa-trash"></i></a></button>
                     </td>
                 </tr>

@@ -43,6 +43,7 @@ if(isset($_GET['id'])) {
             <p><strong>Code:</strong> <?php echo $book['code']; ?></p>
             <p><strong>Author:</strong> <?php echo $book['author']; ?></p>
             <p><strong>Publisher:</strong> <?php echo $book['publisher']; ?></p>
+            <p><strong>Quantity:</strong> <?php echo $book['quantity']; ?></p>
         </div>
         <a href="books.php" class="btn">Back to Books</a>
     </div>

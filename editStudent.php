@@ -24,7 +24,7 @@ if (isset($_POST['update'])) {
     $address = $_POST['address'];
     $contact = $_POST['contact'];
 
-    $sql = "UPDATE add_student SET name='$name', sid='$sid', class='$class', address='$address', contact='$contact'WHERE id='$id'";
+    $sql = "UPDATE add_student SET name='$name', sid='$sid', class='$class', address='$address', contact='$contact' WHERE id='$id'";
     if (mysqli_query($conn, $sql)) {
         header("Location: students.php");
         exit; // Ensure script stops execution after redirection

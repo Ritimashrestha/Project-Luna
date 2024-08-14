@@ -20,6 +20,9 @@ if (isset($_GET['id'])) {
 $sql_students = "SELECT name FROM add_student";
 $result_students = mysqli_query($conn, $sql_students);
 
+$sql_studentsId = "SELECT sid FROM add_student";
+$result_studentsId = mysqli_query($conn, $sql_studentsId);
+
 $sql_books = "SELECT name FROM add_book";
 $result_books = mysqli_query($conn, $sql_books);
 
@@ -32,6 +35,33 @@ if (isset($_POST['update'])) {
     $duedate = $_POST['duedate'];
     $returndate = $_POST['returndate'];
     $status = $_POST['status'];
+
+        // Get the current status of the transaction
+        $sql_current = "SELECT status, book FROM add_member WHERE id='$id'";
+        $result_current = mysqli_query($conn, $sql_current);
+        $row_current = mysqli_fetch_assoc($result_current);
+        $current_status = $row_current['status'];
+        $current_book = $row_current['book'];
+    
+        // Update the transaction
+        $sql_update = "UPDATE add_member SET name='$name', sid='$sid', book='$book', date='$date', duedate='$duedate', returndate='$returndate', status='$status' WHERE id='$id'";
+        mysqli_query($conn, $sql_update);
+    
+        // Adjust book quantity
+        if ($current_status == 'Pending') {
+            $sql_adjust = "UPDATE add_book SET quantity = quantity + 1 WHERE name = '$current_book'";
+            mysqli_query($conn, $sql_adjust);
+        }
+        if ($status == 'Pending') {
+            $sql_adjust = "UPDATE add_book SET quantity = quantity - 1 WHERE name = '$book'";
+            mysqli_query($conn, $sql_adjust);
+        } elseif ($status == 'Returned') {
+            $sql_adjust = "UPDATE add_book SET quantity = quantity + 1 WHERE name = '$book'";
+            mysqli_query($conn, $sql_adjust);
+        }
+    
+        header("Location: members.php");
+        exit();
 
     $sql = "UPDATE add_member SET name='$name', sid='$sid', book='$book', date='$date', duedate='$duedate', returndate='$returndate', status='$status' WHERE id='$id'";
     if (mysqli_query($conn, $sql)) {
@@ -91,7 +121,7 @@ if (isset($_POST['update'])) {
                     <div class="field input">
                         <label for="sid">Student ID</label>
                         <select name="sid" id="sid" required>
-                            <?php while ($row = mysqli_fetch_assoc($result_students)) { ?>
+                            <?php while ($row = mysqli_fetch_assoc($result_studentsId)) { ?>
                                 <option value="<?php echo $row['sid']; ?>" <?php if ($row['sid'] == $member['sid']) echo 'selected'; ?>>
                                     <?php echo $row['sid']; ?>
                                 </option>

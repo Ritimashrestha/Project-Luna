@@ -18,10 +18,24 @@ $conn=mysqli_connect("localhost","root", "", "project_luna") or die("COnnection 
     <link rel="stylesheet" href="assets/luna.css">
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
      <style>
-        .btn{
+        .btn {
             margin-left: 70rem;
-            border: 1px solid blue;
-            background-color: inherit;
+            padding: 10px 20px;
+            border: none;
+            background-color: rgba(76, 68, 182, 0.808);
+            color: white;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #69399F; 
+        }
+        .btn a {
+            color: white; 
+            text-decoration: none; 
         }
         </style>
 </head>
@@ -34,7 +48,7 @@ $conn=mysqli_connect("localhost","root", "", "project_luna") or die("COnnection 
              <div class="header--title">
              <span>Details</span>
                 <h2>Books</h2>
-                <button class="btn"><a href="addBook.php">Add Book</a></a><button>
+                <button class="btn"><a href="addBook.php">Add Book</a><button>
             </div>
             </div>
             <div class="tabular--wrapper">
@@ -48,6 +62,7 @@ $conn=mysqli_connect("localhost","root", "", "project_luna") or die("COnnection 
                                 <th>Book Code</th>
                                 <th>Author</th>
                                 <th>Publisher</th>
+                                <th>Quantity</th>
                                 <th>Action</th>
                             </tr>
                             <?php
@@ -62,11 +77,12 @@ $conn=mysqli_connect("localhost","root", "", "project_luna") or die("COnnection 
                             <td><?php echo $res['code'];?></td>
                             <td><?php echo $res['author'];?></td>
                             <td><?php echo $res['publisher'];?></td>
+                            <td><?php echo $res['quantity'];?></td>
                             <td>
                             <button><a href="bookDetail.php?id=<?php echo $res['id']; ?>"><i class="fa fa-eye"></i></a></button>
                             <button><a href="editBook.php?id=<?php echo $res['id']; ?>"><i class="fa fa-edit"></i></a><button>
                             <button><a href="deleteBook.php?id=<?php echo $res['id']; ?>"><i class="fa fa-trash"></i></a></button>
-</td> 
+                            </td> 
                         </tr>
                         <?php }; ?>
                     </table>

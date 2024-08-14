@@ -23,8 +23,10 @@ if (isset($_POST['update'])) {
     $code = $_POST['code'];
     $author = $_POST['author'];
     $publisher = $_POST['publisher'];
+    $quantity = $_POST['quantity'];
 
-    $sql = "UPDATE add_book SET name='$name', genre='$genre', code='$code', author='$author', publisher='$publisher' WHERE id='$id'";
+
+    $sql = "UPDATE add_book SET name='$name', genre='$genre', code='$code', author='$author', publisher='$publisher', quantity='$quantity' WHERE id='$id'";
     if (mysqli_query($conn, $sql)) {
         header("Location: books.php");
         exit; // Ensure script stops execution after redirection
@@ -87,6 +89,10 @@ if (isset($_POST['update'])) {
                     <div class="field input">
                         <label for="publisher">Publisher</label>
                         <input type="text" name="publisher" id="publisher" autocomplete="off" value="<?php echo $book['publisher']; ?>" required>
+                    </div> 
+                    <div class="field input">
+                        <label for="quantity">Quantity</label>
+                        <input type="number" name="quantity" id="quantity" autocomplete="off" value="<?php echo $book['quantity']; ?>" required>
                     </div> 
                     <div class="field">
                         <input type="submit" class="btn" name="update" value="Update">

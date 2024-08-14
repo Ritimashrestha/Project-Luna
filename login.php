@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Define valid admin credentials
     $validEmail = 'admin';
-    $validPassword = 'admin1234';
+    $validPassword = 'admin123';
 
     if ($email == $validEmail && $password == $validPassword) {
         $_SESSION['loggedin'] = true;

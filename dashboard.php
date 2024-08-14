@@ -23,6 +23,11 @@ $total_students_result = mysqli_query($conn, $total_students_query);
 $total_students_data = mysqli_fetch_assoc($total_students_result);
 $total_students = $total_students_data['total_students'];
 
+$total_genre_query = "SELECT COUNT(*) as total_genre FROM add_book";
+$total_genre_result = mysqli_query($conn, $total_genre_query);
+$total_genre_data = mysqli_fetch_assoc($total_genre_result);
+$total_genre = $total_genre_data['total_genre'];
+
 // Default query without search filter
 $sql = "SELECT * FROM `add_member`";
 
@@ -30,8 +35,8 @@ $sql = "SELECT * FROM `add_member`";
 if(isset($_GET['search_query']) && !empty($_GET['search_query'])) {
     $search_query = mysqli_real_escape_string($conn, $_GET['search_query']);
     // Modify SQL query to include search filter by student ID
-    $sql = "SELECT am.* FROM add_student am
-            JOIN add_student ast ON am.name = ast.name
+    $sql = "SELECT am.* FROM add_member am
+            JOIN add_student ast ON am.sid = ast.sid
             WHERE ast.sid LIKE '%$search_query%'";
 }
 
@@ -153,41 +158,52 @@ $qry = mysqli_query($conn, $sql);
             <div class="tabular--wrapper">
                 <h3 class="main--title">Transaction Data</h3>
                 <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>SN</th>
-                                <th>Name</th> 
-                                <th>Book</th>
-                                <th>Date</th>
-                                <th>Due Date</th>
-                                <th>Return Date</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <?php if (mysqli_num_rows($qry) > 0) { 
-                            while($res = mysqli_fetch_array($qry)){ ?>
-                        <tr class="user-table">
-                            <td><?php echo $res['id'];?></td>
-                            <td><?php echo $res['name'];?></td>
-                            <td><?php echo $res['book'];?></td>
-                            <td><?php echo $res['date'];?></td>
-                            <td><?php echo $res['duedate'];?></td>
-                            <td><?php echo $res['returndate'];?></td>
-                            <td><?php echo $res['status'];?></td>
-                            <td>
-                            <button><a href="transactionDetail.php?id=<?php echo $res['id']; ?>"><i class="fa fa-eye"></i></a></button>
-                                <button><a href="editMember.php?id=<?php echo $res['id']; ?>"><i class="fa fa-edit"></i></a></button>
-                                <button><a href="deleteMember.php?id=<?php echo $res['id']; ?>"><i class="fa fa-trash"></i></a></button>
-                            </td> 
-                        </tr>
-                        <?php } } else { ?>
-                        <tr>
-                            <td colspan="8">No transactions found for the given Student ID.</td>
-                        </tr>
+                <table>
+                <thead>
+                    <tr>
+                        <th>SN</th>
+                        <th>Name</th> 
+                        <th>Student ID</th> 
+                        <th>Book</th>
+                        <th>Date</th>
+                        <th>Due Date</th>
+                        <th>Return Date</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php
+                $sql = "SELECT * FROM `add_member`";
+                $qry = mysqli_query($conn, $sql);
+                while ($res = mysqli_fetch_array($qry)) {
+                ?>
+                <tr class="user-table">
+                    <td><?php echo $res['id']; ?></td>
+                    <td><?php echo $res['name']; ?></td>
+                    <td><?php echo $res['sid']; ?></td>
+                    <td><?php echo $res['book']; ?></td>
+                    <td><?php echo $res['date']; ?></td>
+                    <td><?php echo $res['duedate']; ?></td>
+                    <td><?php echo $res['returndate']; ?></td>
+                    <td><?php echo $res['status']; ?></td>
+                    <td>
+                        <button><a href="transactionDetail.php?id=<?php echo $res['id']; ?>"><i class="fa fa-eye"></i></a></button>
+
+                        <?php if ($res['status'] == 'Returned') { ?>
+                            <!-- Render a disabled edit button -->
+                            <button class="disabled-btn" disabled><i class="fa fa-edit"></i></button>
+                        <?php } else { ?>
+                            <!-- Render the active edit button -->
+                            <button><a href="editMember.php?id=<?php echo $res['id']; ?>"><i class="fa fa-edit"></i></a></button>
                         <?php } ?>
-                    </table>
+
+                        <button><a href="deleteMember.php?id=<?php echo $res['id']; ?>"><i class="fa fa-trash"></i></a></button>
+                    </td>
+                </tr>
+                <?php } ?>
+                </tbody>
+            </table>
                 </div>
             </div>
         </div>
